@@ -1,0 +1,14 @@
+# Build and test artifacts.
+bin/
+coverage.out
+*.test
+
+# Local configuration.
+.env
+.env.*
+!.env.example
+
+# Editors and operating systems.
+.idea/
+.vscode/
+.DS_Store
