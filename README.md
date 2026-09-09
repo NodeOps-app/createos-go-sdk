@@ -22,17 +22,12 @@ import (
 )
 
 func main() {
-	if err := run(context.Background()); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func run(ctx context.Context) error {
+	ctx := context.Background()
 	client, err := sandbox.NewClient(
 		sandbox.WithAPIKey("your-api-key"),
 	)
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 
 	instance, err := client.CreateSandbox(ctx, structs.CreateSandboxRequest{
@@ -41,7 +36,7 @@ func run(ctx context.Context) error {
 		RootFS: "devbox:1",
 	})
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 	defer func() {
 		if err := instance.Destroy(context.Background()); err != nil {
@@ -54,16 +49,16 @@ func run(ctx context.Context) error {
 		Arguments: []string{"-c", `printf "Go says hello from $(uname -m)\n"`},
 	}, structs.ExecOptions{})
 	if err != nil {
-		return err
+		log.Printf("run command: %v", err)
+		return
 	}
 
 	fmt.Print(response.Result.StandardOutput)
-	return nil
 }
 ```
 
 ```text
-Go says hello from aarch64
+Go says hello from x86_64
 ```
 
 `WithAPIKey` configures authentication explicitly. Do not commit a real API key
@@ -89,6 +84,9 @@ when `WithAPIKey` is not provided. Explicit options always take precedence.
   contains the REST API reference and product guides.
 - [Go API reference](https://pkg.go.dev/github.com/NodeOps-app/createos-go-sdk)
   is generated from the SDK's public GoDoc after a tagged release.
+- [CreateOS TypeScript SDK](https://github.com/NodeOps-app/createos-sandbox-sdk)
+  provides the same sandbox capabilities for JavaScript and TypeScript
+  applications.
 - [Runnable examples](#examples) cover command execution, files, streaming,
   ingress, snapshots, networking, templates, managed processes, and desktop use.
 - [Contributing guide](CONTRIBUTING.md) documents development checks and commit

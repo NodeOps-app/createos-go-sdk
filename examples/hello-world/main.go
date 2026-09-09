@@ -32,8 +32,8 @@ func main() {
 	}()
 
 	response, err := instance.RunCommand(ctx, structs.RunCommandRequest{
-		Command:   "uname",
-		Arguments: []string{"-a"},
+		Command:   "sh",
+		Arguments: []string{"-c", `printf "Go says hello from $(uname -m)\n"`},
 	}, structs.ExecOptions{})
 	if err != nil {
 		log.Printf("run command: %v", err)
