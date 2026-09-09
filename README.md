@@ -161,6 +161,30 @@ if err != nil {
 }
 ```
 
+For large transfers, override the timeout for that operation without changing
+the client's default timeout:
+
+```go
+transferOptions := structs.RequestOptions{Timeout: 30 * time.Minute}
+
+if err := instance.Files().Upload(ctx, remotePath, source, transferOptions); err != nil {
+	return err
+}
+file, err := instance.Files().Download(ctx, remotePath, transferOptions)
+if err != nil {
+	return err
+}
+defer func() {
+	if err := file.Close(); err != nil {
+		log.Printf("close downloaded file: %v", err)
+	}
+}()
+```
+
+The timeout covers the complete transfer, including reading the downloaded
+body. Uploads are not retried because an arbitrary `io.Reader` may not be safe
+to replay after a partial write.
+
 ## Keep a process alive after disconnecting
 
 Managed processes are resources rather than fragile terminal sessions. Start
