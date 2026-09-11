@@ -78,19 +78,23 @@ when `WithAPIKey` is not provided. Explicit options always take precedence.
 
 ## Documentation
 
-- [CreateOS Sandbox overview](https://nodeops.network/createos/docs/Sandbox/Overview)
+- [CreateOS Sandbox overview](https://createos.sh/docs/Sandbox/Overview)
   explains the sandbox model, lifecycle, networking, storage, and isolation.
-- [CreateOS Sandbox documentation](https://nodeops.network/createos/docs)
+- [CreateOS Sandbox documentation](https://createos.sh/docs)
   contains the REST API reference and product guides.
 - [Go API reference](https://pkg.go.dev/github.com/NodeOps-app/createos-go-sdk)
   is generated from the SDK's public GoDoc after a tagged release.
 - [CreateOS TypeScript SDK](https://github.com/NodeOps-app/createos-sandbox-sdk)
   provides the same sandbox capabilities for JavaScript and TypeScript
   applications.
+- [CreateOS Python SDK](https://github.com/NodeOps-app/createos-python-sdk)
+  provides the same sandbox capabilities for Python applications.
 - [Runnable examples](#examples) cover command execution, files, streaming,
   ingress, snapshots, networking, templates, managed processes, and desktop use.
 - [Contributing guide](CONTRIBUTING.md) documents development checks and commit
   conventions.
+- [`CLAUDE.md`](CLAUDE.md) is the agent guide, covering repository conventions,
+  the sibling-SDK map, and the cross-SDK parity protocol.
 
 ## Stream output as it happens
 
