@@ -93,8 +93,8 @@ when `WithAPIKey` is not provided. Explicit options always take precedence.
   ingress, snapshots, networking, templates, managed processes, and desktop use.
 - [Contributing guide](CONTRIBUTING.md) documents development checks and commit
   conventions.
-- [`CLAUDE.md`](CLAUDE.md) is the agent guide, covering repository conventions,
-  the sibling-SDK map, and the cross-SDK parity protocol.
+- [`CLAUDE.md`](CLAUDE.md) is the agent guide, covering repository conventions
+  plus the generated cross-repo mesh block.
 
 ## Stream output as it happens
 
