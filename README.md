@@ -63,38 +63,48 @@ Go says hello from x86_64
 
 `WithAPIKey` configures authentication explicitly. Do not commit a real API key
 to source control; inject the value through your application's secret manager.
-Additional client options can configure the endpoint and default timeout:
+Additional client options configure the endpoint, default timeout, and retry
+policy:
 
 ```go
 client, err := sandbox.NewClient(
 	sandbox.WithAPIKey(apiKey),
 	sandbox.WithBaseURL("http://localhost:8080"),
 	sandbox.WithTimeout(30*time.Second),
+	sandbox.WithRetry(3, 250*time.Millisecond, 10*time.Second),
 )
 ```
 
-As an optional alternative, `NewClient()` reads `CREATEOS_SANDBOX_API_KEY`
-when `WithAPIKey` is not provided. Explicit options always take precedence.
+`NewClient()` reads `CREATEOS_API_KEY` and the optional
+`CREATEOS_SANDBOX_BASE_URL`. Explicit options take precedence.
+
+Authenticated requests send the key as `X-Api-Key`. Health, readiness, shape,
+and root-filesystem catalog requests omit it. Use HTTPS for non-loopback
+endpoints. To customize proxy or TLS settings, pass an `http.Client` through
+`WithHTTPClient`; the SDK rejects redirects to a different origin so the key
+cannot be forwarded there.
 
 ## Documentation
 
-- [CreateOS Sandbox overview](https://createos.sh/docs/Sandbox/Overview)
+- [CreateOS Sandbox overview](https://nodeops.network/createos/docs/Sandbox/Overview)
   explains the sandbox model, lifecycle, networking, storage, and isolation.
-- [CreateOS Sandbox documentation](https://createos.sh/docs)
+- [CreateOS Sandbox documentation](https://nodeops.network/createos/docs)
   contains the REST API reference and product guides.
 - [Go API reference](https://pkg.go.dev/github.com/NodeOps-app/createos-go-sdk)
   is generated from the SDK's public GoDoc after a tagged release.
-- [CreateOS TypeScript SDK](https://github.com/NodeOps-app/createos-sandbox-sdk)
-  provides the same sandbox capabilities for JavaScript and TypeScript
-  applications.
-- [CreateOS Python SDK](https://github.com/NodeOps-app/createos-python-sdk)
-  provides the same sandbox capabilities for Python applications.
 - [Runnable examples](#examples) cover command execution, files, streaming,
   ingress, snapshots, networking, templates, managed processes, and desktop use.
 - [Contributing guide](CONTRIBUTING.md) documents development checks and commit
   conventions.
-- [`CLAUDE.md`](CLAUDE.md) is the agent guide, covering repository conventions
-  plus the generated cross-repo mesh block.
+
+### SDKs
+
+- [TypeScript](https://github.com/NodeOps-app/createos-sandbox-sdk)
+- [Python](https://github.com/NodeOps-app/createos-python-sdk)
+- [Go](https://github.com/NodeOps-app/createos-go-sdk)
+- [C#](https://github.com/NodeOps-app/createos-csharp-sdk)
+- [Java](https://github.com/NodeOps-app/createos-java-sdk)
+- [Rust](https://github.com/NodeOps-app/createos-rust-sdk)
 
 ## Stream output as it happens
 
@@ -381,6 +391,13 @@ Runnable examples live under [`examples/`](examples/):
 - [Custom template](examples/custom-template/main.go)
 - [Managed process lifecycle](examples/managed-process/main.go)
 - [Desktop and noVNC](examples/desktop/main.go)
+
+Run one with the API key in the environment:
+
+```sh
+export CREATEOS_API_KEY="your-api-key"
+go run ./examples/hello-world
+```
 
 ## Development
 

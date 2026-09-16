@@ -33,7 +33,7 @@ type retryConfig struct {
 
 func resolveConfig(options ...ClientOption) (clientConfig, error) {
 	configuration := clientConfig{
-		apiKey:    strings.TrimSpace(os.Getenv("CREATEOS_SANDBOX_API_KEY")),
+		apiKey:    strings.TrimSpace(os.Getenv("CREATEOS_API_KEY")),
 		baseURL:   strings.TrimSpace(os.Getenv("CREATEOS_SANDBOX_BASE_URL")),
 		userAgent: defaultUserAgent,
 		timeout:   defaultTimeout,

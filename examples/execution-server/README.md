@@ -7,7 +7,7 @@ its output, destroys the sandbox, and returns JSON.
 Run the server:
 
 ```sh
-export CREATEOS_SANDBOX_API_KEY="your-api-key"
+export CREATEOS_API_KEY="your-api-key"
 go run ./examples/execution-server
 ```
 

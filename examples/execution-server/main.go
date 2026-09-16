@@ -186,9 +186,9 @@ func writeJSON(writer http.ResponseWriter, status int, value any) {
 }
 
 func main() {
-	apiKey := strings.TrimSpace(os.Getenv("CREATEOS_SANDBOX_API_KEY"))
+	apiKey := strings.TrimSpace(os.Getenv("CREATEOS_API_KEY"))
 	if apiKey == "" {
-		log.Fatal("CREATEOS_SANDBOX_API_KEY is required")
+		log.Fatal("CREATEOS_API_KEY is required")
 	}
 	client, err := sandbox.NewClient(sandbox.WithAPIKey(apiKey))
 	if err != nil {

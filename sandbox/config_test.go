@@ -7,7 +7,7 @@ import (
 )
 
 func TestResolveConfigPrecedence(t *testing.T) {
-	t.Setenv("CREATEOS_SANDBOX_API_KEY", "environment-key")
+	t.Setenv("CREATEOS_API_KEY", "environment-key")
 	t.Setenv("CREATEOS_SANDBOX_BASE_URL", "https://environment.example")
 
 	configuration, err := resolveConfig(
@@ -29,6 +29,27 @@ func TestResolveConfigPrecedence(t *testing.T) {
 	}
 	if configuration.httpClient.Timeout != 0 {
 		t.Errorf("HTTP client timeout = %v, want request contexts to own the timeout", configuration.httpClient.Timeout)
+	}
+}
+
+func TestResolveConfigReadsCreateOSAPIKey(t *testing.T) {
+	t.Setenv("CREATEOS_API_KEY", "")
+
+	configuration, err := resolveConfig()
+	if err != nil {
+		t.Fatalf("resolveConfig() error = %v", err)
+	}
+	if configuration.apiKey != "" {
+		t.Errorf("apiKey = %q, want empty when CREATEOS_API_KEY is unset", configuration.apiKey)
+	}
+
+	t.Setenv("CREATEOS_API_KEY", "new-key")
+	configuration, err = resolveConfig()
+	if err != nil {
+		t.Fatalf("resolveConfig() error = %v", err)
+	}
+	if configuration.apiKey != "new-key" {
+		t.Errorf("apiKey = %q, want new-key", configuration.apiKey)
 	}
 }
 

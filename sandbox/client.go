@@ -25,7 +25,7 @@ type Client struct {
 }
 
 // NewClient creates a fully initialized client. The API key and base URL can
-// also be read from CREATEOS_SANDBOX_API_KEY and CREATEOS_SANDBOX_BASE_URL.
+// also be read from CREATEOS_API_KEY and CREATEOS_SANDBOX_BASE_URL.
 func NewClient(options ...ClientOption) (*Client, error) {
 	configuration, err := resolveConfig(options...)
 	if err != nil {
