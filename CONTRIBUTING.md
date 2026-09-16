@@ -59,4 +59,5 @@ make test-race
 ```
 
 Add or update tests for behavior changes and update public GoDoc and README
-examples when the public API changes.
+examples when the public API changes. Record user-visible changes in
+[CHANGELOG.md](CHANGELOG.md) under `Unreleased`.
