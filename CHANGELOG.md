@@ -5,6 +5,11 @@ repository's Git tags.
 
 ## [Unreleased]
 
+## [0.0.5] - 2026-09-16
+
+This release publishes the current SDK under a new immutable module version.
+There are no API or behavior changes from v0.0.4.
+
 ## [0.0.4] - 2026-09-16
 
 ### Added
@@ -36,7 +41,8 @@ repository's Git tags.
   ingress, networks, templates, managed processes, and desktop control.
 - Runnable examples and development checks.
 
-[Unreleased]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.4...HEAD
+[Unreleased]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.1...v0.0.2
