@@ -5,6 +5,13 @@ repository's Git tags.
 
 ## [Unreleased]
 
+## [0.0.4] - 2026-09-16
+
+### Added
+
+- Release changelog for the Go SDK, linked from the README and contributing
+  guide.
+
 ## [0.0.3] - 2026-09-16
 
 ### Changed
@@ -29,7 +36,8 @@ repository's Git tags.
   ingress, networks, templates, managed processes, and desktop control.
 - Runnable examples and development checks.
 
-[Unreleased]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/NodeOps-app/createos-go-sdk/tree/v0.0.1
