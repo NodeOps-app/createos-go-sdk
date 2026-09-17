@@ -96,6 +96,7 @@ cannot be forwarded there.
   ingress, snapshots, networking, templates, managed processes, and desktop use.
 - [Contributing guide](CONTRIBUTING.md) documents development checks and commit
   conventions.
+- [Security policy](SECURITY.md) explains private vulnerability reporting.
 - [Changelog](CHANGELOG.md) records changes by release.
 
 ### SDKs
