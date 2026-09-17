@@ -3,6 +3,7 @@
 This example turns the CreateOS Go SDK into a small HTTP execution service. A
 `POST /v1/execute` request creates a fresh sandbox, runs one command, captures
 its output, destroys the sandbox, and returns JSON.
+See [main.go](main.go) for the code.
 
 Run the server:
 
