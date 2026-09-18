@@ -8,7 +8,8 @@ repository's Git tags.
 ### Fixed
 
 - Redact plaintext sandbox access tokens from formatted response output to
-  prevent accidental disclosure in logs.
+  prevent accidental disclosure in logs. The plaintext remains available through
+  `SandboxAccessTokenCreateResponse.Token` for the caller to use.
 
 ## [0.0.6] - 2026-09-19
 
