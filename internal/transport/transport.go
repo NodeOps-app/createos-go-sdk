@@ -144,6 +144,14 @@ type Client struct {
 	hooks      Hooks
 }
 
+// WithAPIKey returns a transport with the same connection settings and a
+// different credential. It leaves the original transport unchanged.
+func (c *Client) WithAPIKey(apiKey string) *Client {
+	clone := *c
+	clone.apiKey = apiKey
+	return &clone
+}
+
 // New validates config and creates a transport client.
 func New(config Config) (*Client, error) {
 	baseURL, err := url.Parse(config.BaseURL)

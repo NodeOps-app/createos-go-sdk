@@ -104,6 +104,24 @@ type SandboxResponse struct {
 	AutoPauseAfterSeconds *int          `json:"auto_pause_after_seconds,omitempty"`
 }
 
+// SandboxAccessTokenCreateResponse contains a delegated credential returned
+// only when it is created or rotated. Store Token securely; it cannot be read
+// again through the metadata endpoint.
+type SandboxAccessTokenCreateResponse struct {
+	Token     string     `json:"token"`
+	Enabled   bool       `json:"enabled"`
+	CreatedAt time.Time  `json:"created_at"`
+	RotatedAt *time.Time `json:"rotated_at,omitempty"`
+}
+
+// SandboxAccessTokenMetadata contains token state without credential material.
+type SandboxAccessTokenMetadata struct {
+	Enabled   bool       `json:"enabled"`
+	TokenHint string     `json:"token_hint,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	RotatedAt *time.Time `json:"rotated_at,omitempty"`
+}
+
 // AddSSHPublicKeysResponse reports the resulting key count.
 type AddSSHPublicKeysResponse struct {
 	Count int `json:"count"`
