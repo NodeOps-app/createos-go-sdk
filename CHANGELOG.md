@@ -5,6 +5,11 @@ repository's Git tags.
 
 ## [Unreleased]
 
+### Fixed
+
+- Redact plaintext sandbox access tokens from formatted response output to
+  prevent accidental disclosure in logs.
+
 ## [0.0.6] - 2026-09-19
 
 ### Added

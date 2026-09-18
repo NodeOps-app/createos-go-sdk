@@ -114,6 +114,16 @@ type SandboxAccessTokenCreateResponse struct {
 	RotatedAt *time.Time `json:"rotated_at,omitempty"`
 }
 
+// String redacts the delegated credential in logs and formatted output.
+func (SandboxAccessTokenCreateResponse) String() string {
+	return "SandboxAccessTokenCreateResponse{Token:[REDACTED]}"
+}
+
+// GoString also redacts the credential for %#v formatting.
+func (r SandboxAccessTokenCreateResponse) GoString() string {
+	return r.String()
+}
+
 // SandboxAccessTokenMetadata contains token state without credential material.
 type SandboxAccessTokenMetadata struct {
 	Enabled   bool       `json:"enabled"`
