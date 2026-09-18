@@ -84,6 +84,54 @@ endpoints. To customize proxy or TLS settings, pass an `http.Client` through
 `WithHTTPClient`; the SDK rejects redirects to a different origin so the key
 cannot be forwarded there.
 
+## Delegate access to one sandbox
+
+An owner can create one sandbox access token and pass it to another client.
+The token is returned only when created or rotated; inspection provides a
+redacted hint. Keep the owner's API key for token management.
+
+```go
+created, err := instance.CreateAccessToken(ctx)
+if err != nil {
+	return err
+}
+// Store created.Token securely, then give it to the sandbox worker.
+workerInstance, err := instance.WithAccessToken(created.Token)
+if err != nil {
+	return err
+}
+result, err := workerInstance.RunCommand(ctx, structs.RunCommandRequest{
+	Command: "sh", Arguments: []string{"-c", "echo hello"},
+}, structs.ExecOptions{})
+if err != nil {
+	return err
+}
+fmt.Print(result.Result.StandardOutput)
+
+metadata, err := instance.GetAccessToken(ctx)
+if err != nil {
+	return err
+}
+_ = metadata.TokenHint
+
+replacement, err := instance.RotateAccessToken(ctx)
+if err != nil {
+	return err
+}
+_ = replacement.Token // Replace the worker's stored token.
+
+_, err = instance.DisableAccessToken(ctx)
+if err != nil {
+	return err
+}
+```
+
+Creating a second enabled token returns HTTP 409; rotation requires an existing
+token. Disabling is idempotent. Revocation is immediate in the sandbox's home
+region and propagates asynchronously to other regions. The delegated token can
+operate its bound sandbox, including commands, files, processes, computer use,
+pause, resume, and destroy. It cannot manage access tokens or account resources.
+
 ## Documentation
 
 - [CreateOS Sandbox overview](https://nodeops.network/createos/docs/Sandbox/Overview)

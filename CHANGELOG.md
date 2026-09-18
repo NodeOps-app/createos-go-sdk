@@ -5,6 +5,12 @@ repository's Git tags.
 
 ## [Unreleased]
 
+### Added
+
+- Sandbox access token create, inspect, rotate, and disable methods on
+  `Instance`, with separate plaintext and metadata response types. A
+  `WithAccessToken` handle runs sandbox operations using the delegated token.
+
 ## [0.0.5] - 2026-09-16
 
 This release publishes the current SDK under a new immutable module version.
