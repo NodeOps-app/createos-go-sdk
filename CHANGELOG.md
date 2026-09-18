@@ -5,6 +5,8 @@ repository's Git tags.
 
 ## [Unreleased]
 
+## [0.0.6] - 2026-09-19
+
 ### Added
 
 - Sandbox access token create, inspect, rotate, and disable methods on
@@ -47,7 +49,8 @@ There are no API or behavior changes from v0.0.4.
   ingress, networks, templates, managed processes, and desktop control.
 - Runnable examples and development checks.
 
-[Unreleased]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.5...HEAD
+[Unreleased]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.6...HEAD
+[0.0.6]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/NodeOps-app/createos-go-sdk/compare/v0.0.2...v0.0.3
