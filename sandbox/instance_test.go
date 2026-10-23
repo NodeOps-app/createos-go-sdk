@@ -30,10 +30,17 @@ func TestCreateSandboxInitializesInstanceServices(t *testing.T) {
 		if request.Method != http.MethodPost || request.URL.Path != "/v1/sandboxes" {
 			t.Errorf("request = %s %s, want POST /v1/sandboxes", request.Method, request.URL.Path)
 		}
-		return jsonResponse(request, `{"status":"success","data":{"id":"sb-1","status":"running","name":"worker","ip":"10.0.0.2","shape":"small","rootfs":"devbox:1","vcpu":1,"mem_mib":256,"disk_mib":1024,"spawn_ms":5.25,"egress":[],"bandwidth_quota_bytes":-1}}`), nil
+		var body structs.CreateSandboxRequest
+		if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request: %v", err)
+		}
+		if body.Labels["team"] != "backend" {
+			t.Errorf("labels = %#v, want team=backend", body.Labels)
+		}
+		return jsonResponse(request, `{"status":"success","data":{"id":"sb-1","status":"running","name":"worker","labels":{"team":"backend"},"ip":"10.0.0.2","shape":"small","rootfs":"devbox:1","vcpu":1,"mem_mib":256,"disk_mib":1024,"spawn_ms":5.25,"egress":[],"bandwidth_quota_bytes":-1}}`), nil
 	})
 
-	instance, err := client.CreateSandbox(t.Context(), structs.CreateSandboxRequest{Shape: "small"})
+	instance, err := client.CreateSandbox(t.Context(), structs.CreateSandboxRequest{Shape: "small", Labels: map[string]string{"team": "backend"}})
 	if err != nil {
 		t.Fatalf("CreateSandbox() error = %v", err)
 	}
@@ -42,6 +49,14 @@ func TestCreateSandboxInitializesInstanceServices(t *testing.T) {
 	}
 	if instance.Name() != "worker" || instance.IPAddress() != "10.0.0.2" || instance.Data().SpawnMilliseconds != 5.25 {
 		t.Errorf("instance = %#v, want nullable fields and fractional spawn timing preserved", instance.Data())
+	}
+	data := instance.Data()
+	if data.Labels["team"] != "backend" {
+		t.Errorf("labels = %#v, want team=backend", data.Labels)
+	}
+	data.Labels["team"] = "changed"
+	if instance.Data().Labels["team"] != "backend" {
+		t.Error("Data() returned a mutable alias of cached labels")
 	}
 	if instance.Files() == nil || instance.Processes() == nil || instance.Computer() == nil {
 		t.Fatal("instance services were not initialized")
@@ -158,6 +173,9 @@ func TestListSandboxesWalksNestedPagination(t *testing.T) {
 	requests := 0
 	client := testClient(t, func(request *http.Request) (*http.Response, error) {
 		requests++
+		if request.URL.Query().Get("labels") != `{"environment":"test","team":"backend"}` {
+			t.Errorf("labels query = %q", request.URL.Query().Get("labels"))
+		}
 		offset := request.URL.Query().Get("offset")
 		body := `{"status":"success","data":{"data":[{"id":"sb-1","status":"running","vcpu":1,"mem_mib":256,"disk_mib":1024,"created_at":"2026-09-08T00:00:00Z","ingress_enabled":false}],"pagination":{"total":2,"limit":1,"offset":0,"count":1}}}`
 		if offset == "1" {
@@ -166,11 +184,32 @@ func TestListSandboxesWalksNestedPagination(t *testing.T) {
 		return jsonResponse(request, body), nil
 	})
 
-	instances, err := client.ListSandboxes(context.Background(), structs.ListSandboxesOptions{})
+	instances, err := client.ListSandboxes(context.Background(), structs.ListSandboxesOptions{Labels: map[string]string{"team": "backend", "environment": "test"}})
 	if err != nil {
 		t.Fatalf("ListSandboxes() error = %v", err)
 	}
 	if len(instances) != 2 || requests != 2 {
 		t.Errorf("got %d instances in %d requests, want 2 in 2", len(instances), requests)
+	}
+}
+
+func TestSetLabelsPatchesAndUpdatesCachedState(t *testing.T) {
+	client := testClient(t, func(request *http.Request) (*http.Response, error) {
+		var body structs.PatchSandboxRequest
+		if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request: %v", err)
+		}
+		if request.Method != http.MethodPatch || body.Labels["team"] != "platform" {
+			t.Errorf("request = %s %#v", request.Method, body)
+		}
+		return jsonResponse(request, `{"status":"success","data":{"id":"sb-1","status":"running","labels":{"environment":"test","team":"platform"},"vcpu":1,"mem_mib":256,"disk_mib":1024,"created_at":"2026-09-08T00:00:00Z","ingress_enabled":false}}`), nil
+	})
+	instance := newInstance(client.transport, structs.SandboxResponse{ID: "sb-1"})
+
+	if err := instance.SetLabels(t.Context(), map[string]string{"team": "platform"}); err != nil {
+		t.Fatalf("SetLabels() error = %v", err)
+	}
+	if got := instance.Data().Labels; got["team"] != "platform" || got["environment"] != "test" {
+		t.Errorf("cached labels = %#v", got)
 	}
 }

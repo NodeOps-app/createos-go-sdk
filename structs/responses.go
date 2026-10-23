@@ -60,48 +60,50 @@ type HostPublic struct {
 
 // CreateSandboxResponse records resolved placement and boot timing.
 type CreateSandboxResponse struct {
-	ID                  string        `json:"id"`
-	Status              SandboxStatus `json:"status"`
-	Name                *string       `json:"name,omitempty"`
-	IPAddress           string        `json:"ip"`
-	Shape               string        `json:"shape"`
-	RootFS              *string       `json:"rootfs,omitempty"`
-	VCPU                int           `json:"vcpu"`
-	MemoryMiB           int           `json:"mem_mib"`
-	DiskMiB             int64         `json:"disk_mib"`
-	SpawnMilliseconds   float64       `json:"spawn_ms"`
-	EgressRules         []string      `json:"egress"`
-	BandwidthQuotaBytes int64         `json:"bandwidth_quota_bytes"`
-	IngressURLTemplate  string        `json:"ingress_url_template,omitempty"`
+	ID                  string            `json:"id"`
+	Status              SandboxStatus     `json:"status"`
+	Name                *string           `json:"name,omitempty"`
+	Labels              map[string]string `json:"labels,omitempty"`
+	IPAddress           string            `json:"ip"`
+	Shape               string            `json:"shape"`
+	RootFS              *string           `json:"rootfs,omitempty"`
+	VCPU                int               `json:"vcpu"`
+	MemoryMiB           int               `json:"mem_mib"`
+	DiskMiB             int64             `json:"disk_mib"`
+	SpawnMilliseconds   float64           `json:"spawn_ms"`
+	EgressRules         []string          `json:"egress"`
+	BandwidthQuotaBytes int64             `json:"bandwidth_quota_bytes"`
+	IngressURLTemplate  string            `json:"ingress_url_template,omitempty"`
 }
 
 // SandboxResponse is the full server-side projection of a sandbox.
 type SandboxResponse struct {
-	ID                    string        `json:"id"`
-	Status                SandboxStatus `json:"status"`
-	IPAddress             *string       `json:"ip,omitempty"`
-	VCPU                  int           `json:"vcpu"`
-	MemoryMiB             int           `json:"mem_mib"`
-	DiskMiB               int64         `json:"disk_mib"`
-	CreatedAt             time.Time     `json:"created_at"`
-	IngressEnabled        bool          `json:"ingress_enabled"`
-	IngressURLTemplate    string        `json:"ingress_url_template,omitempty"`
-	Name                  *string       `json:"name,omitempty"`
-	RunningAt             *time.Time    `json:"running_at,omitempty"`
-	DestroyedAt           *time.Time    `json:"destroyed_at,omitempty"`
-	SpawnMilliseconds     float64       `json:"spawn_ms,omitempty"`
-	Shape                 string        `json:"shape,omitempty"`
-	RootFS                *string       `json:"rootfs,omitempty"`
-	Region                string        `json:"region,omitempty"`
-	EgressRules           []string      `json:"egress,omitempty"`
-	EnvironmentVariables  []string      `json:"envs,omitempty"`
-	SSHPublicKeys         []string      `json:"ssh_pubkeys,omitempty"`
-	CreatedBy             string        `json:"created_by,omitempty"`
-	BandwidthIngressBytes int64         `json:"bandwidth_ingress_bytes,omitempty"`
-	PausedAt              *time.Time    `json:"paused_at,omitempty"`
-	LastResumedAt         *time.Time    `json:"last_resumed_at,omitempty"`
-	ForkedFrom            *string       `json:"forked_from,omitempty"`
-	AutoPauseAfterSeconds *int          `json:"auto_pause_after_seconds,omitempty"`
+	ID                    string            `json:"id"`
+	Status                SandboxStatus     `json:"status"`
+	IPAddress             *string           `json:"ip,omitempty"`
+	VCPU                  int               `json:"vcpu"`
+	MemoryMiB             int               `json:"mem_mib"`
+	DiskMiB               int64             `json:"disk_mib"`
+	CreatedAt             time.Time         `json:"created_at"`
+	IngressEnabled        bool              `json:"ingress_enabled"`
+	IngressURLTemplate    string            `json:"ingress_url_template,omitempty"`
+	Name                  *string           `json:"name,omitempty"`
+	Labels                map[string]string `json:"labels,omitempty"`
+	RunningAt             *time.Time        `json:"running_at,omitempty"`
+	DestroyedAt           *time.Time        `json:"destroyed_at,omitempty"`
+	SpawnMilliseconds     float64           `json:"spawn_ms,omitempty"`
+	Shape                 string            `json:"shape,omitempty"`
+	RootFS                *string           `json:"rootfs,omitempty"`
+	Region                string            `json:"region,omitempty"`
+	EgressRules           []string          `json:"egress,omitempty"`
+	EnvironmentVariables  []string          `json:"envs,omitempty"`
+	SSHPublicKeys         []string          `json:"ssh_pubkeys,omitempty"`
+	CreatedBy             string            `json:"created_by,omitempty"`
+	BandwidthIngressBytes int64             `json:"bandwidth_ingress_bytes,omitempty"`
+	PausedAt              *time.Time        `json:"paused_at,omitempty"`
+	LastResumedAt         *time.Time        `json:"last_resumed_at,omitempty"`
+	ForkedFrom            *string           `json:"forked_from,omitempty"`
+	AutoPauseAfterSeconds *int              `json:"auto_pause_after_seconds,omitempty"`
 }
 
 // SandboxAccessTokenCreateResponse contains a delegated credential returned
