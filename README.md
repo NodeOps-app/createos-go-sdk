@@ -84,6 +84,24 @@ endpoints. To customize proxy or TLS settings, pass an `http.Client` through
 `WithHTTPClient`; the SDK rejects redirects to a different origin so the key
 cannot be forwarded there.
 
+## Organize sandboxes with labels
+
+```go
+instance, err := client.CreateSandbox(ctx, structs.CreateSandboxRequest{
+	Shape:  "s-1vcpu-1gb",
+	Labels: map[string]string{"team": "backend", "environment": "test"},
+})
+
+matches, err := client.ListSandboxes(ctx, structs.ListSandboxesOptions{
+	Labels: map[string]string{"team": "backend"},
+})
+
+err = instance.SetLabels(ctx, map[string]string{"environment": "production"})
+```
+
+List filters use AND semantics. `SetLabels` merges the supplied keys into the
+existing label map.
+
 ## Delegate access to one sandbox
 
 An owner can create one sandbox access token and pass it to another client.

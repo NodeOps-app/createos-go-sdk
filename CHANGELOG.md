@@ -5,6 +5,11 @@ repository's Git tags.
 
 ## [Unreleased]
 
+### Added
+
+- Sandbox labels on create and response models, AND-matched label filtering in
+  `ListSandboxes`, and label merging through `Instance.SetLabels`.
+
 ### Fixed
 
 - Redact plaintext sandbox access tokens from formatted response output to

@@ -35,6 +35,8 @@ type ListSandboxesOptions struct {
 	// Status restricts results to one lifecycle state. The zero value does not
 	// filter by status.
 	Status SandboxStatus `json:"-"`
+	// Labels requires every supplied key/value pair to match.
+	Labels map[string]string `json:"-"`
 }
 
 // ExecOptions configures one buffered or streaming command.

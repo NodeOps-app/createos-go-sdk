@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"maps"
 	"net/http"
 	"slices"
 	"sync"
@@ -79,6 +80,7 @@ func (i *Instance) snapshot() structs.SandboxResponse {
 	data.EgressRules = slices.Clone(i.data.EgressRules)
 	data.EnvironmentVariables = slices.Clone(i.data.EnvironmentVariables)
 	data.SSHPublicKeys = slices.Clone(i.data.SSHPublicKeys)
+	data.Labels = maps.Clone(i.data.Labels)
 	return data
 }
 
@@ -166,6 +168,19 @@ func (i *Instance) SetIngress(ctx context.Context, enabled bool) error {
 	}, &response)
 	if err != nil {
 		return fmt.Errorf("set ingress for sandbox %q: %w", i.ID(), err)
+	}
+	i.update(response)
+	return nil
+}
+
+// SetLabels merges labels into the sandbox's existing labels.
+func (i *Instance) SetLabels(ctx context.Context, labels map[string]string) error {
+	var response structs.SandboxResponse
+	err := i.transport.Do(ctx, http.MethodPatch, i.path(""), transport.RequestOptions{
+		Body: structs.PatchSandboxRequest{Labels: labels},
+	}, &response)
+	if err != nil {
+		return fmt.Errorf("set labels for sandbox %q: %w", i.ID(), err)
 	}
 	i.update(response)
 	return nil

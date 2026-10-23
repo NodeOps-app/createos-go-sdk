@@ -14,6 +14,8 @@ type CreateSandboxRequest struct {
 	RootFS string `json:"rootfs,omitempty"`
 	// Name is an optional human-readable sandbox name.
 	Name string `json:"name,omitempty"`
+	// Labels are user-defined metadata for organizing and filtering sandboxes.
+	Labels map[string]string `json:"labels,omitempty"`
 	// Networks are overlay networks attached during creation.
 	Networks []NetworkEntry `json:"networks,omitempty"`
 	// DiskMiB requests an overlay disk size in mebibytes.
@@ -55,6 +57,8 @@ type ForkSandboxRequest struct {
 
 // PatchSandboxRequest contains mutable sandbox settings.
 type PatchSandboxRequest struct {
+	// Labels are merged into the sandbox's existing labels.
+	Labels map[string]string `json:"labels,omitempty"`
 	// IngressEnabled changes ingress when non-nil.
 	IngressEnabled *bool `json:"ingress_enabled,omitempty"`
 	// AutoPauseAfterSeconds changes the idle timeout when non-nil.

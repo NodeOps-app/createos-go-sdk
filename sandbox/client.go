@@ -137,6 +137,7 @@ func (c *Client) CreateSandbox(ctx context.Context, request structs.CreateSandbo
 		IngressEnabled:     request.IngressEnabled,
 		IngressURLTemplate: created.IngressURLTemplate,
 		Name:               created.Name,
+		Labels:             created.Labels,
 		SpawnMilliseconds:  created.SpawnMilliseconds,
 		Shape:              created.Shape,
 		RootFS:             created.RootFS,
@@ -168,6 +169,13 @@ func (c *Client) ListSandboxes(ctx context.Context, options structs.ListSandboxe
 	query := make(url.Values)
 	if options.Status != "" {
 		query.Set("status", string(options.Status))
+	}
+	if len(options.Labels) > 0 {
+		labels, err := json.Marshal(options.Labels)
+		if err != nil {
+			return nil, fmt.Errorf("encode sandbox label filter: %w", err)
+		}
+		query.Set("labels", string(labels))
 	}
 	requestOptions := transportOptions(options.RequestOptions)
 	views, err := fetchAll[structs.SandboxResponse](ctx, c.transport, "/v1/sandboxes", query, options.Limit, "", requestOptions)
