@@ -89,6 +89,7 @@ cannot be forwarded there.
 ```go
 instance, err := client.CreateSandbox(ctx, structs.CreateSandboxRequest{
 	Shape:  "s-1vcpu-1gb",
+	RootFS: "alpine:3.20",
 	Labels: map[string]string{"team": "backend", "environment": "test"},
 })
 
