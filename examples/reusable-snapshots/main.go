@@ -29,7 +29,8 @@ func main() {
 		Type: structs.SnapshotTypeDisk, Name: "configured-workspace",
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("create snapshot: %v", err)
+		return
 	}
 	defer func() {
 		latest, err := client.Snapshots().Get(context.Background(), snapshot.ID)
@@ -45,12 +46,14 @@ func main() {
 	}()
 	snapshot, err = waitUntilReady(ctx, client, snapshot.ID, 5*time.Minute)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("wait for snapshot: %v", err)
+		return
 	}
 
 	restored, err := client.CreateSandbox(ctx, structs.CreateSandboxRequest{SnapshotID: snapshot.ID})
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("restore sandbox: %v", err)
+		return
 	}
 	defer destroy(restored)
 	fmt.Printf("restored sandbox %s from snapshot %s\n", restored.ID(), snapshot.ID)
@@ -68,6 +71,8 @@ func waitUntilReady(ctx context.Context, client *sandbox.Client, id string, time
 			return snapshot, nil
 		case structs.SnapshotStatusFailed:
 			return nil, fmt.Errorf("snapshot %s failed", id)
+		case structs.SnapshotStatusCreating, structs.SnapshotStatusDeleting:
+			// Continue polling until the snapshot reaches a terminal state.
 		}
 		time.Sleep(time.Second)
 	}
