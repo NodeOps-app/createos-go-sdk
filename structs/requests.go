@@ -8,8 +8,11 @@ type NetworkEntry struct {
 
 // CreateSandboxRequest is the body used to create a sandbox.
 type CreateSandboxRequest struct {
-	// Shape is the required sizing preset identifier.
-	Shape string `json:"shape"`
+	// SnapshotID restores an owned ready reusable snapshot. It cannot be used
+	// with RootFS.
+	SnapshotID string `json:"snapshot_id,omitempty"`
+	// Shape is required for ordinary creates and optional for snapshot restores.
+	Shape string `json:"shape,omitempty"`
 	// RootFS is a built-in root filesystem name or custom template ID.
 	RootFS string `json:"rootfs,omitempty"`
 	// Name is an optional human-readable sandbox name.
@@ -38,6 +41,14 @@ type CreateSandboxRequest struct {
 	Region string `json:"region,omitempty"`
 	// AutoPauseAfterSeconds pauses an idle sandbox after this many seconds.
 	AutoPauseAfterSeconds int `json:"auto_pause_after_seconds,omitempty"`
+}
+
+// CreateSnapshotRequest starts a reusable snapshot capture.
+type CreateSnapshotRequest struct {
+	// Type selects a disk-only or full memory-and-disk snapshot.
+	Type SnapshotType `json:"type"`
+	// Name is an optional non-unique display name.
+	Name string `json:"name,omitempty"`
 }
 
 // ForkSandboxRequest contains optional overrides applied to a fork.

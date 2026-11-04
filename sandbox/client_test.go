@@ -28,7 +28,7 @@ func TestNewClientInitializesServices(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewClient() error = %v", err)
 	}
-	if client.Templates() == nil || client.Networks() == nil || client.Disks() == nil {
+	if client.Templates() == nil || client.Networks() == nil || client.Disks() == nil || client.Snapshots() == nil {
 		t.Fatal("NewClient() did not initialize every service")
 	}
 }

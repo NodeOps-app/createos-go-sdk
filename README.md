@@ -103,6 +103,26 @@ err = instance.SetLabels(ctx, map[string]string{"environment": "production"})
 List filters use AND semantics. `SetLabels` merges the supplied keys into the
 existing label map.
 
+## Capture and restore snapshots
+
+```go
+snapshot, err := instance.CreateSnapshot(ctx, structs.CreateSnapshotRequest{
+	Type: structs.SnapshotTypeDisk,
+	Name: "configured-workspace",
+})
+
+snapshot, err = client.Snapshots().Get(ctx, snapshot.ID) // poll until ready
+
+restored, err := client.CreateSandbox(ctx, structs.CreateSandboxRequest{
+	SnapshotID: snapshot.ID,
+})
+```
+
+Disk snapshots capture the filesystem. Full snapshots also retain memory and
+must be restored with their captured CPU, memory, and disk sizes. Snapshot
+capture requires a running source sandbox with no attached external disks.
+Each account may retain up to five snapshots across both types.
+
 ## Delegate access to one sandbox
 
 An owner can create one sandbox access token and pass it to another client.
@@ -468,6 +488,7 @@ Runnable examples live under [`examples/`](examples/):
 - [HTTP execution server](examples/execution-server/README.md)
 - [Command streaming](examples/command-streaming/README.md)
 - [Files and snapshots](examples/files-and-snapshots/README.md)
+- [Reusable snapshots](examples/reusable-snapshots/README.md)
 - [Ingress preview](examples/ingress-preview/README.md)
 - [Private overlay network](examples/network/README.md)
 - [Custom template](examples/custom-template/README.md)

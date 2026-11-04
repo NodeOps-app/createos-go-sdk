@@ -22,6 +22,7 @@ type Client struct {
 	templates *TemplatesService
 	networks  *NetworksService
 	disks     *DisksService
+	snapshots *SnapshotsService
 }
 
 // NewClient creates a fully initialized client. The API key and base URL can
@@ -53,6 +54,7 @@ func NewClient(options ...ClientOption) (*Client, error) {
 	client.templates = &TemplatesService{transport: httpTransport}
 	client.networks = &NetworksService{transport: httpTransport}
 	client.disks = &DisksService{transport: httpTransport}
+	client.snapshots = &SnapshotsService{transport: httpTransport}
 	return client, nil
 }
 
@@ -67,6 +69,9 @@ func (c *Client) Networks() *NetworksService { return c.networks }
 
 // Disks returns the automatically initialized disk service.
 func (c *Client) Disks() *DisksService { return c.disks }
+
+// Snapshots returns the automatically initialized reusable snapshot service.
+func (c *Client) Snapshots() *SnapshotsService { return c.snapshots }
 
 // Healthz returns the unauthenticated liveness state of the control plane.
 func (c *Client) Healthz(ctx context.Context) (*structs.HealthzResponse, error) {
@@ -128,6 +133,7 @@ func (c *Client) CreateSandbox(ctx context.Context, request structs.CreateSandbo
 		return nil, fmt.Errorf("create sandbox: %w", err)
 	}
 	view := &structs.SandboxResponse{
+		SnapshotID:         created.SnapshotID,
 		ID:                 created.ID,
 		Status:             created.Status,
 		IPAddress:          &created.IPAddress,

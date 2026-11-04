@@ -60,6 +60,7 @@ type HostPublic struct {
 
 // CreateSandboxResponse records resolved placement and boot timing.
 type CreateSandboxResponse struct {
+	SnapshotID          *string           `json:"snapshot_id,omitempty"`
 	ID                  string            `json:"id"`
 	Status              SandboxStatus     `json:"status"`
 	Name                *string           `json:"name,omitempty"`
@@ -78,6 +79,7 @@ type CreateSandboxResponse struct {
 
 // SandboxResponse is the full server-side projection of a sandbox.
 type SandboxResponse struct {
+	SnapshotID            *string           `json:"snapshot_id,omitempty"`
 	ID                    string            `json:"id"`
 	Status                SandboxStatus     `json:"status"`
 	IPAddress             *string           `json:"ip,omitempty"`
@@ -104,6 +106,28 @@ type SandboxResponse struct {
 	LastResumedAt         *time.Time        `json:"last_resumed_at,omitempty"`
 	ForkedFrom            *string           `json:"forked_from,omitempty"`
 	AutoPauseAfterSeconds *int              `json:"auto_pause_after_seconds,omitempty"`
+}
+
+// SnapshotView describes an owned reusable sandbox snapshot.
+type SnapshotView struct {
+	ID        string         `json:"id"`
+	SandboxID string         `json:"sandbox_id"`
+	Name      *string        `json:"name,omitempty"`
+	Type      SnapshotType   `json:"type"`
+	Status    SnapshotStatus `json:"status"`
+	CreatedAt time.Time      `json:"created_at"`
+	ReadyAt   *time.Time     `json:"ready_at,omitempty"`
+	Shape     string         `json:"shape"`
+	VCPU      int            `json:"vcpu"`
+	MemoryMiB int            `json:"mem_mib"`
+	DiskMiB   int64          `json:"disk_mib"`
+	SizeBytes int64          `json:"size_bytes"`
+}
+
+// SnapshotDeletedResponse reports an accepted reusable snapshot deletion.
+type SnapshotDeletedResponse struct {
+	ID     string         `json:"id"`
+	Status SnapshotStatus `json:"status"`
 }
 
 // SandboxAccessTokenCreateResponse contains a delegated credential returned
