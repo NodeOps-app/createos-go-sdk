@@ -27,6 +27,26 @@ const (
 	SandboxStatusFailed     SandboxStatus = "failed"
 )
 
+// SnapshotType selects which sandbox state is captured.
+type SnapshotType string
+
+// Supported reusable snapshot types.
+const (
+	SnapshotTypeDisk SnapshotType = "disk"
+	SnapshotTypeFull SnapshotType = "full"
+)
+
+// SnapshotStatus is the lifecycle state of a reusable snapshot.
+type SnapshotStatus string
+
+// Supported reusable snapshot lifecycle states.
+const (
+	SnapshotStatusCreating SnapshotStatus = "creating"
+	SnapshotStatusReady    SnapshotStatus = "ready"
+	SnapshotStatusFailed   SnapshotStatus = "failed"
+	SnapshotStatusDeleting SnapshotStatus = "deleting"
+)
+
 // RetryReason identifies why an HTTP request is retried.
 type RetryReason string
 

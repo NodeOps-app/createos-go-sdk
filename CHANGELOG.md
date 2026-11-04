@@ -7,6 +7,8 @@ repository's Git tags.
 
 ### Added
 
+- Reusable disk and full snapshot create, get, list, and delete operations,
+  plus sandbox restoration through `CreateSandboxRequest.SnapshotID`.
 - Sandbox labels on create and response models, AND-matched label filtering in
   `ListSandboxes`, and label merging through `Instance.SetLabels`.
 
