@@ -130,6 +130,21 @@ type SnapshotDeletedResponse struct {
 	Status SnapshotStatus `json:"status"`
 }
 
+// Checkpoint describes local file history retained inside one sandbox.
+type Checkpoint struct {
+	ID        string    `json:"id"`
+	Path      string    `json:"path"`
+	Name      *string   `json:"name,omitempty"`
+	ParentID  *string   `json:"parent_id,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// CheckpointRestoreResponse identifies the restored directory view.
+type CheckpointRestoreResponse struct {
+	CheckpointID string `json:"checkpoint_id"`
+	Path         string `json:"path"`
+}
+
 // SandboxAccessTokenCreateResponse contains a delegated credential returned
 // only when it is created or rotated. Store Token securely; it cannot be read
 // again through the metadata endpoint.

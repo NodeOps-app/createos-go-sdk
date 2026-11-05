@@ -24,9 +24,10 @@ type Instance struct {
 	mu   sync.RWMutex
 	data structs.SandboxResponse
 
-	files     *FilesService
-	processes *ProcessesService
-	computer  *ComputerService
+	files       *FilesService
+	processes   *ProcessesService
+	computer    *ComputerService
+	checkpoints *CheckpointsService
 }
 
 func newInstance(client *transport.Client, data structs.SandboxResponse) *Instance {
@@ -34,6 +35,7 @@ func newInstance(client *transport.Client, data structs.SandboxResponse) *Instan
 	instance.files = &FilesService{instance: instance}
 	instance.processes = &ProcessesService{instance: instance}
 	instance.computer = newComputerService(instance)
+	instance.checkpoints = &CheckpointsService{instance: instance}
 	return instance
 }
 
@@ -72,6 +74,9 @@ func (i *Instance) Processes() *ProcessesService { return i.processes }
 
 // Computer returns desktop computer-use operations for this sandbox.
 func (i *Instance) Computer() *ComputerService { return i.computer }
+
+// Checkpoints returns local checkpoint operations for this sandbox.
+func (i *Instance) Checkpoints() *CheckpointsService { return i.checkpoints }
 
 func (i *Instance) snapshot() structs.SandboxResponse {
 	i.mu.RLock()
