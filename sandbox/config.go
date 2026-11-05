@@ -13,7 +13,7 @@ import (
 const (
 	defaultBaseURL   = "https://api.sb.createos.sh"
 	defaultTimeout   = 60 * time.Second
-	defaultUserAgent = "createos-go-sdk/0.0.1"
+	defaultUserAgent = "createos-go-sdk/0.0.7"
 )
 
 type clientConfig struct {

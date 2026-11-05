@@ -123,6 +123,27 @@ must be restored with their captured CPU, memory, and disk sizes. Snapshot
 capture requires a running source sandbox with no attached external disks.
 Each account may retain up to five snapshots across both types.
 
+## Checkpoint a directory
+
+Checkpoints keep local file history inside one running sandbox. Stop
+writers before create or restore; processes are not paused automatically.
+
+```go
+checkpoint, err := instance.Checkpoints().Create(ctx,
+	structs.CreateCheckpointRequest{
+		Path: "/workspace/project",
+		Name: "before-update",
+	})
+
+checkpoints, err := instance.Checkpoints().List(ctx)
+restored, err := instance.Checkpoints().Restore(ctx, checkpoint.ID)
+err = instance.Checkpoints().Delete(ctx, checkpoint.ID)
+```
+
+Restore always uses the checkpoint's original path. Checkpoints remain on the
+sandbox disk and are deleted with the sandbox; they are separate from reusable
+VM snapshots. See the [runnable example](examples/checkpoints/).
+
 ## Delegate access to one sandbox
 
 An owner can create one sandbox access token and pass it to another client.

@@ -7,6 +7,8 @@ repository's Git tags.
 
 ### Added
 
+- Checkpoint create, list, restore, and delete operations scoped to
+  a running sandbox through `Instance.Checkpoints()`.
 - Reusable disk and full snapshot create, get, list, and delete operations,
   plus sandbox restoration through `CreateSandboxRequest.SnapshotID`.
 - Sandbox labels on create and response models, AND-matched label filtering in
@@ -17,6 +19,10 @@ repository's Git tags.
 - Redact plaintext sandbox access tokens from formatted response output to
   prevent accidental disclosure in logs. The plaintext remains available through
   `SandboxAccessTokenCreateResponse.Token` for the caller to use.
+
+### Changed
+
+- Set the next patch release User-Agent to `createos-go-sdk/0.0.7`.
 
 ## [0.0.6] - 2026-09-19
 

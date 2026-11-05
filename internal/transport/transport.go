@@ -403,7 +403,9 @@ func (c *Client) resolveURL(path string, query url.Values) (*url.URL, error) {
 	// Endpoint paths are relative to the configured base path even when callers
 	// use the conventional leading slash (for example, "/v1/sandboxes").
 	if !reference.IsAbs() && reference.Host == "" {
+		escapedPath := strings.TrimLeft(reference.EscapedPath(), "/")
 		reference.Path = strings.TrimLeft(reference.Path, "/")
+		reference.RawPath = escapedPath
 	}
 	resolved := c.baseURL.ResolveReference(reference)
 	if origin(resolved) != c.baseOrigin {

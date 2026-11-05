@@ -51,6 +51,15 @@ type CreateSnapshotRequest struct {
 	Name string `json:"name,omitempty"`
 }
 
+// CreateCheckpointRequest selects a directory whose local file history
+// should be captured inside one running sandbox.
+type CreateCheckpointRequest struct {
+	// Path is the absolute directory path to checkpoint.
+	Path string `json:"path"`
+	// Name is an optional non-unique display label.
+	Name string `json:"name,omitempty"`
+}
+
 // ForkSandboxRequest contains optional overrides applied to a fork.
 type ForkSandboxRequest struct {
 	// StartPaused leaves the fork paused instead of starting it.
