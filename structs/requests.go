@@ -19,6 +19,12 @@ type CreateSandboxRequest struct {
 	Name string `json:"name,omitempty"`
 	// Labels are user-defined metadata for organizing and filtering sandboxes.
 	Labels map[string]string `json:"labels,omitempty"`
+	// TimeoutMinutes sets an absolute sandbox lifetime from when it first reaches running.
+	// Valid values are 2 through 1440 minutes. Pause and resume do not extend it.
+	TimeoutMinutes int `json:"timeout_minutes,omitempty"`
+	// SigtermBeforeExpiry requests a best-effort SIGTERM warning during the final
+	// minute. It requires TimeoutMinutes.
+	SigtermBeforeExpiry bool `json:"sigterm_before_expiry,omitempty"`
 	// Networks are overlay networks attached during creation.
 	Networks []NetworkEntry `json:"networks,omitempty"`
 	// DiskMiB requests an overlay disk size in mebibytes.

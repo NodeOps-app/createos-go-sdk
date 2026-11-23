@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/NodeOps-app/createos-go-sdk/structs"
 )
@@ -37,10 +38,13 @@ func TestCreateSandboxInitializesInstanceServices(t *testing.T) {
 		if body.Labels["team"] != "backend" {
 			t.Errorf("labels = %#v, want team=backend", body.Labels)
 		}
-		return jsonResponse(request, `{"status":"success","data":{"id":"sb-1","status":"running","name":"worker","labels":{"team":"backend"},"ip":"10.0.0.2","shape":"small","rootfs":"devbox:1","vcpu":1,"mem_mib":256,"disk_mib":1024,"spawn_ms":5.25,"egress":[],"bandwidth_quota_bytes":-1}}`), nil
+		if body.TimeoutMinutes != 10 || !body.SigtermBeforeExpiry {
+			t.Errorf("expiry request = %#v, want 10 minutes with SIGTERM warning", body)
+		}
+		return jsonResponse(request, `{"status":"success","data":{"id":"sb-1","status":"running","name":"worker","labels":{"team":"backend"},"expires_at":"2026-11-23T12:10:00Z","sigterm_before_expiry":true,"ip":"10.0.0.2","shape":"small","rootfs":"devbox:1","vcpu":1,"mem_mib":256,"disk_mib":1024,"spawn_ms":5.25,"egress":[],"bandwidth_quota_bytes":-1}}`), nil
 	})
 
-	instance, err := client.CreateSandbox(t.Context(), structs.CreateSandboxRequest{Shape: "small", Labels: map[string]string{"team": "backend"}})
+	instance, err := client.CreateSandbox(t.Context(), structs.CreateSandboxRequest{Shape: "small", Labels: map[string]string{"team": "backend"}, TimeoutMinutes: 10, SigtermBeforeExpiry: true})
 	if err != nil {
 		t.Fatalf("CreateSandbox() error = %v", err)
 	}
@@ -53,6 +57,9 @@ func TestCreateSandboxInitializesInstanceServices(t *testing.T) {
 	data := instance.Data()
 	if data.Labels["team"] != "backend" {
 		t.Errorf("labels = %#v, want team=backend", data.Labels)
+	}
+	if data.ExpiresAt == nil || data.ExpiresAt.UTC().Format(time.RFC3339) != "2026-11-23T12:10:00Z" || !data.SigtermBeforeExpiry {
+		t.Errorf("expiry = %v warning=%t, want returned deadline and warning", data.ExpiresAt, data.SigtermBeforeExpiry)
 	}
 	data.Labels["team"] = "changed"
 	if instance.Data().Labels["team"] != "backend" {

@@ -7,6 +7,8 @@ repository's Git tags.
 
 ### Added
 
+- Optional sandbox expiry through `CreateSandboxRequest.TimeoutMinutes`, with
+  `ExpiresAt` response fields and an optional final-minute SIGTERM warning.
 - Checkpoint create, list, restore, and delete operations scoped to
   a running sandbox through `Instance.Checkpoints()`.
 - Reusable disk and full snapshot create, get, list, and delete operations,
@@ -22,7 +24,7 @@ repository's Git tags.
 
 ### Changed
 
-- Set the next patch release User-Agent to `createos-go-sdk/0.0.7`.
+- Set the next patch release User-Agent to `createos-go-sdk/0.0.10`.
 
 ## [0.0.6] - 2026-09-19
 

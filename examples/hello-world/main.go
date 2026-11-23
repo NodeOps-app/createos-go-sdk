@@ -19,12 +19,15 @@ func main() {
 	}
 
 	instance, err := client.CreateSandbox(ctx, structs.CreateSandboxRequest{
-		Shape:  "s-4vcpu-4gb",
-		RootFS: "devbox:1",
+		Shape:               "s-4vcpu-4gb",
+		RootFS:              "devbox:1",
+		TimeoutMinutes:      10,
+		SigtermBeforeExpiry: true,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Printf("expires_at=%v sigterm_before_expiry=%t\n", instance.Data().ExpiresAt, instance.Data().SigtermBeforeExpiry)
 	defer func() {
 		if err := instance.Destroy(context.Background()); err != nil {
 			log.Printf("destroy sandbox: %v", err)

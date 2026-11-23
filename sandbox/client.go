@@ -133,21 +133,23 @@ func (c *Client) CreateSandbox(ctx context.Context, request structs.CreateSandbo
 		return nil, fmt.Errorf("create sandbox: %w", err)
 	}
 	view := &structs.SandboxResponse{
-		SnapshotID:         created.SnapshotID,
-		ID:                 created.ID,
-		Status:             created.Status,
-		IPAddress:          &created.IPAddress,
-		VCPU:               created.VCPU,
-		MemoryMiB:          created.MemoryMiB,
-		DiskMiB:            created.DiskMiB,
-		IngressEnabled:     request.IngressEnabled,
-		IngressURLTemplate: created.IngressURLTemplate,
-		Name:               created.Name,
-		Labels:             created.Labels,
-		SpawnMilliseconds:  created.SpawnMilliseconds,
-		Shape:              created.Shape,
-		RootFS:             created.RootFS,
-		EgressRules:        created.EgressRules,
+		SnapshotID:          created.SnapshotID,
+		ExpiresAt:           created.ExpiresAt,
+		SigtermBeforeExpiry: created.SigtermBeforeExpiry,
+		ID:                  created.ID,
+		Status:              created.Status,
+		IPAddress:           &created.IPAddress,
+		VCPU:                created.VCPU,
+		MemoryMiB:           created.MemoryMiB,
+		DiskMiB:             created.DiskMiB,
+		IngressEnabled:      request.IngressEnabled,
+		IngressURLTemplate:  created.IngressURLTemplate,
+		Name:                created.Name,
+		Labels:              created.Labels,
+		SpawnMilliseconds:   created.SpawnMilliseconds,
+		Shape:               created.Shape,
+		RootFS:              created.RootFS,
+		EgressRules:         created.EgressRules,
 	}
 	return newInstance(c.transport, *view), nil
 }
