@@ -61,6 +61,8 @@ type HostPublic struct {
 // CreateSandboxResponse records resolved placement and boot timing.
 type CreateSandboxResponse struct {
 	SnapshotID          *string           `json:"snapshot_id,omitempty"`
+	ExpiresAt           *time.Time        `json:"expires_at,omitempty"`
+	SigtermBeforeExpiry bool              `json:"sigterm_before_expiry,omitempty"`
 	ID                  string            `json:"id"`
 	Status              SandboxStatus     `json:"status"`
 	Name                *string           `json:"name,omitempty"`
@@ -80,6 +82,8 @@ type CreateSandboxResponse struct {
 // SandboxResponse is the full server-side projection of a sandbox.
 type SandboxResponse struct {
 	SnapshotID            *string           `json:"snapshot_id,omitempty"`
+	ExpiresAt             *time.Time        `json:"expires_at,omitempty"`
+	SigtermBeforeExpiry   bool              `json:"sigterm_before_expiry,omitempty"`
 	ID                    string            `json:"id"`
 	Status                SandboxStatus     `json:"status"`
 	IPAddress             *string           `json:"ip,omitempty"`

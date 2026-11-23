@@ -103,6 +103,24 @@ err = instance.SetLabels(ctx, map[string]string{"environment": "production"})
 List filters use AND semantics. `SetLabels` merges the supplied keys into the
 existing label map.
 
+## Limit sandbox lifetime
+
+```go
+instance, err := client.CreateSandbox(ctx, structs.CreateSandboxRequest{
+	Shape:                "s-1vcpu-1gb",
+	RootFS:               "devbox:1",
+	TimeoutMinutes:       10,
+	SigtermBeforeExpiry: true,
+})
+
+fmt.Println(instance.Data().ExpiresAt)
+```
+
+`TimeoutMinutes` accepts 2–1440 whole minutes and starts when the sandbox first
+reaches `running`. Activity and pause/resume do not extend the deadline.
+`SigtermBeforeExpiry` requests a best-effort warning to managed workloads during
+the final minute and requires `TimeoutMinutes`.
+
 ## Capture and restore snapshots
 
 ```go
